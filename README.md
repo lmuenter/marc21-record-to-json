@@ -57,3 +57,15 @@ deactivate
 ```
 pytest
 ```
+
+## Required Dependencies
+
+The following dependencies are required to run the program:
+
+| Dependency  | Version | Description                  |
+|-------------|---------|------------------------------|
+| Python      | 3.7+    | Programming language         |
+| xmlschema   | 1.9.2   | XML schema validator         |
+| pytest      | 7.1.2   | Testing framework for Python |
+
+Please ensure that these are set up. Please note that the command line tools handle setup and activation via a Virtual Environment.
