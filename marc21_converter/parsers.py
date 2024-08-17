@@ -1,18 +1,8 @@
 import xml.etree.ElementTree as ET
 import json
 from marc21_converter.utils import get_control_fields, get_medium_type, get_full_title, get_data_field, get_publication_date
-
-
-mapping = {
-    "format": {
-        "tu": "print",
-        "cr": "electronic",
-    },
-    "type": {
-        "cam": "book",
-        "caa": "article",
-    }
-}
+from marc21_converter.cleaners import clean_record
+from marc21_converter._constants import DATA_MAPPING
 
 
 def parse_marc21_xml(xml_string):
@@ -21,9 +11,10 @@ def parse_marc21_xml(xml_string):
     records = []
     for record in root.findall(".//marc:record", namespace):
         processed_record = process_record(record, namespace)
-        cleaned_record = clean_record(processed_record, mapping)
+        cleaned_record = clean_record(processed_record, DATA_MAPPING)
         records.append(cleaned_record)
     return json.dumps(records, indent=2)
+
 
 def process_record(record, namespace):
     controlfields = get_control_fields(record, namespace)
@@ -40,12 +31,3 @@ def process_record(record, namespace):
     return processed_record
 
 
-def clean_record(processed_record, mappings):
-    cleaned_record = {}
-    for key, value in processed_record.items():
-        if key in mappings:
-            cleaned_value = mappings[key].get(value, value)
-            cleaned_record[key] = cleaned_value
-        else:
-            cleaned_record[key] = value
-    return cleaned_record
