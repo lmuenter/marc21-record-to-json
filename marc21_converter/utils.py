@@ -1,4 +1,5 @@
 import re
+import logging
 
 
 def get_control_fields(record, namespace):
@@ -39,3 +40,16 @@ def read_xml_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         xml_string = file.read()
     return xml_string
+
+
+def get_publication_date(record, namespace):
+    parsed_data =  [
+        get_data_field(record, namespace, "264", "c"), 
+        get_data_field(record, namespace, "264", "d"), 
+        get_data_field(record, namespace, "264", "e")
+    ]
+
+    if all(v is None for v in parsed_data[1:]):
+         return list(filter(lambda item: item is not None, parsed_data))
+    
+    return parsed_data
