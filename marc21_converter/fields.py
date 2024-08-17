@@ -1,4 +1,5 @@
 import re
+from marc21_converter._constants import IDENTIFIER_TAGS
 
 
 def get_control_fields(record, namespace):
@@ -96,3 +97,23 @@ def get_institutes(record, namespace, tag, subfield_code, role_code):
             authors.append(author)
 
     return authors
+
+
+def get_identifiers(record, namespace):
+    identifiers = []
+    for identifier_type, tag_info in IDENTIFIER_TAGS.items():
+        tag = tag_info["tag"]
+        subfield_code = tag_info["subfield_code"]
+
+        datafield = record.find(f".//marc:datafield[@tag='{tag}']", namespace)
+        if datafield is not None:
+            subfield = datafield.find(f".//marc:subfield[@code='{subfield_code}']", namespace)
+
+            if subfield is not None:
+                identifier = {
+                    "type": identifier_type,
+                    "value": subfield.text
+                }
+                identifiers.append(identifier)
+
+    return identifiers
