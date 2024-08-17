@@ -8,3 +8,9 @@ DATA_MAPPING = {
         "caa": "article",
     }
 }
+
+
+LANGUAGE_TO_LOCALE = {
+    "ger": "de_DE.utf8",
+    "eng": "en_US.utf8",
+}
