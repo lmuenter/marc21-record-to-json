@@ -49,14 +49,16 @@ def get_publication_date(record, namespace):
 
 def get_contributors(record, namespace):
     authors = get_authors(record, namespace, "100", "a", "4")
+    institutes_first_authors = get_institutes(record, namespace, "110", "a", "4")
     further_authors = get_authors(record, namespace, "700", "a", "4")
-    return authors + further_authors
+    institutes_further_authors = get_institutes(record, namespace, "710", "a", "4")
+    return authors + institutes_first_authors + further_authors + institutes_further_authors
 
 def get_authors(record, namespace, tag, subfield_code, role_code):
     name_records = record.findall(f".//marc:datafield[@tag='{tag}']", namespace)
 
     authors = []
-    
+
     for name_record in name_records:
         if name_record is not None:
             full_name = name_record.find(f"marc:subfield[@code='{subfield_code}']", namespace)
@@ -65,10 +67,32 @@ def get_authors(record, namespace, tag, subfield_code, role_code):
             full_name_text = full_name.text
             name_parts_cleaned = [x.strip() for x in full_name_text.split(',')]
 
-            authors.append({
+            author = {
                 "given_name": name_parts_cleaned[1],
                 "family_name": name_parts_cleaned[0],
                 "role": role_name.text,
-            })
+            }
+
+            authors.append(author)
+
+    return authors
+
+
+def get_institutes(record, namespace, tag, subfield_code, role_code):
+    name_records = record.findall(f".//marc:datafield[@tag='{tag}']", namespace)
+    authors = []
+
+    for name_record in name_records:
+        if name_record is not None:
+            name = name_record.find(f"marc:subfield[@code='{subfield_code}']", namespace)
+            role = name_record.find(f"marc:subfield[@code='{role_code}']", namespace)
+
+            author = {
+                "name": name.text,
+                "role": role.text,
+                "corporation": True
+            }
+
+            authors.append(author)
 
     return authors

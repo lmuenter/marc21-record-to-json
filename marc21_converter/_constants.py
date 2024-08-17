@@ -9,7 +9,8 @@ DATA_MAPPING = {
     },
     "role": {
         "aut": "author",
-        "edt": "editor"
+        "edt": "editor",
+        "oth": "other"
     }
 }
 
