@@ -1,11 +1,31 @@
 # marc21-record-to-json
 A tool for record extraction and JSON serialization for MARC21 XML data.
 
-# Installation
+# Installation and Usage
 
 ## Prerequisits
 - This tool requires **Python3.7+**. If you do not have Python on your system, follow the installation instructions of Python's official [website](https://www.python.org/).
 - You should have git installed to clone this repo.
+
+
+## Installation
+1. **Just Clone the repo:**
+```
+git clone "lmuenter/marc21-record-to-json"
+```
+
+## Usage
+To run the program, you can simply use the included command line tools.
+
+1. **Running under Windows:**
+```
+path\to\get_marc21_records.bat -f myfile.xml -o myoutput.json
+```
+
+2. **Running under Unix (incl. MacOS)**
+```
+path/to/get_marc21_records.sh -f myfile.xml -o myoutput.json
+```
 
 ## Development Setup
 1. **Clone the repo:**
@@ -33,9 +53,7 @@ pip install -r requirements.txt
 ```
 deactivate
 ```
-
-# Usage
-- Run the commandline script using the python interpreter:
+6. **Run Unit Tests:**
 ```
-python /path/to/cloned/repo/get_marc21_records.py -f myfile.xml -o myjson.json
+pytest
 ```
