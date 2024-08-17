@@ -5,13 +5,15 @@ from marc21_converter.cleaners import clean_record
 from marc21_converter._constants import DATA_MAPPING
 from marc21_converter.utils import normalize_unicode
 import xmlschema
+import os
 
 
 class XMLValidationError(Exception):
     pass
 
 
-def parse_marc21_xml(xml_string, xsd_path):
+def parse_marc21_xml(xml_string):
+    xsd_path = os.path.join(os.path.dirname(__file__), "schemas", "MARC21slim.xsd")
     validate_xml(xml_string, xsd_path)
 
     root = ET.fromstring(xml_string)
