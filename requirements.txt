@@ -1,0 +1,2 @@
+xmlschema==1.9.2
+pytest==7.1.2
