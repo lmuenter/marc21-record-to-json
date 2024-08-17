@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 import json
-from marc21_converter.utils import get_control_fields, get_medium_type, get_full_title, get_data_field, get_publication_date
+from marc21_converter.fields import get_control_fields, get_medium_type, get_full_title, get_data_field, get_publication_date, get_contributors
 from marc21_converter.cleaners import clean_record
 from marc21_converter._constants import DATA_MAPPING
 
@@ -25,7 +25,8 @@ def process_record(record, namespace):
         "type": get_medium_type(record, namespace),
         "title": get_full_title(record, namespace),
         "language": get_data_field(record, namespace, tag="041", subfield_code="a"),
-        "publication_date": get_publication_date(record, namespace)
+        "publication_date": get_publication_date(record, namespace),
+        "contributors": get_contributors(record, namespace)
     }
     
     return processed_record
