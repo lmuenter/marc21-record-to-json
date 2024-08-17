@@ -117,3 +117,19 @@ def get_identifiers(record, namespace):
                 identifiers.append(identifier)
 
     return identifiers
+
+
+def get_keywords(record, namespace, tag=650):
+    datafields = record.findall(f".//marc:datafield[@tag='{tag}']", namespace)
+
+    keywords = []
+    if datafields is not None:
+        for datafield in datafields:
+            subfields = datafield.findall(f".//marc:subfield", namespace)
+            if subfields is not None:
+                for subfield in subfields:
+                    keywords.append({
+                        "value": subfield.text
+                    })
+
+    return keywords

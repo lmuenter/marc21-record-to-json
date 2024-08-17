@@ -6,7 +6,7 @@ from marc21_converter.utils import read_xml_file
 
 
 def test_parse_marc21_xml():
-    expected_keys = {"id", "format", "type", "title", "language", "publication_date", "contributors", "identifiers"}
+    expected_keys = {"id", "format", "type", "title", "language", "publication_date", "contributors", "identifiers", "keywords"}
     expected_record_count = 2
     file_path = "assignment/daten.xml"
 
