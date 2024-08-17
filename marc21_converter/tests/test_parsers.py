@@ -31,5 +31,5 @@ def test_publication_dates():
     for result in results:
         publication_date = result.get("publication_date", [])
         assert all(v is not None for v in publication_date), "Found None value in publication_date"
-        assert all(v.isdigit() for v in publication_date), "Found non-numeric value in publication_date"
+        assert all(isinstance(v, int) for v in publication_date), "Found non-numeric value in publication_date"
 

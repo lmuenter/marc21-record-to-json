@@ -58,7 +58,7 @@ def clean_dates(data):
         return data
     try:
         month_number = datetime.datetime.strptime(dates[1], "%B").month
-        dates[1] = str(month_number)
+        dates[1] = month_number
     except ValueError as e:
         print(f"An error occurred during date conversion: {e}")
     

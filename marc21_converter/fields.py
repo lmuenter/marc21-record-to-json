@@ -1,5 +1,6 @@
 import re
 from marc21_converter._constants import IDENTIFIER_TAGS
+from marc21_converter.utils import convert_to_digit
 
 
 def get_control_fields(record, namespace):
@@ -38,9 +39,9 @@ def get_full_title(record, namespace):
 
 def get_publication_date(record, namespace):
     parsed_data =  [
-        get_data_field(record, namespace, "264", "c"), 
-        get_data_field(record, namespace, "264", "d"), 
-        get_data_field(record, namespace, "264", "e")
+        convert_to_digit(get_data_field(record, namespace, "264", "c")), 
+        convert_to_digit(get_data_field(record, namespace, "264", "d")), 
+        convert_to_digit(get_data_field(record, namespace, "264", "e"))
     ]
 
     if all(v is None for v in parsed_data[1:]):

@@ -16,3 +16,9 @@ def normalize_unicode(data):
         return unicodedata.normalize('NFC', data)
     else:
         return data
+    
+
+def convert_to_digit(value):
+    if value is not None and value.isdigit():
+        return int(value)
+    return value
