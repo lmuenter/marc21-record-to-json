@@ -1,6 +1,7 @@
 import datetime
 import locale
 import copy
+import re
 
 from marc21_converter._constants import LANGUAGE_TO_LOCALE
 
@@ -33,6 +34,9 @@ def apply_data_mapping(processed_record, mappings):
             return {k: clean_value(k, v, mappings) for k, v in value.items()}
         elif isinstance(value, list):
             return [clean_value(key, v, mappings) for v in value]
+        elif isinstance(value, str):
+            cleaned_value = mappings.get(key, {}).get(value, value)
+            return clean_trailing_characters(cleaned_value)
         else:
             return mappings.get(key, {}).get(value, value)
 
@@ -59,3 +63,8 @@ def clean_dates(data):
         print(f"An error occurred during date conversion: {e}")
     
     return data
+
+
+def clean_trailing_characters(value):
+    """Removes trailing dots, commas, semicolons, and spaces"""
+    return re.sub(r'[.,; \t]+$', '', value)
