@@ -4,9 +4,16 @@ from marc21_converter.fields import get_control_fields, get_medium_type, get_ful
 from marc21_converter.cleaners import clean_record
 from marc21_converter._constants import DATA_MAPPING
 from marc21_converter.utils import normalize_unicode
+import xmlschema
 
 
-def parse_marc21_xml(xml_string):
+class XMLValidationError(Exception):
+    pass
+
+
+def parse_marc21_xml(xml_string, xsd_path):
+    validate_xml(xml_string, xsd_path)
+
     root = ET.fromstring(xml_string)
     namespace = {"marc": "http://www.loc.gov/MARC21/slim"}
     records = []
@@ -35,4 +42,9 @@ def process_record(record, namespace):
     
     return processed_record
 
+
+def validate_xml(xml_string, xsd_path):
+    schema = xmlschema.XMLSchema(xsd_path)
+    if not schema.is_valid(xml_string):
+        raise XMLValidationError("XML validation against the schema failed.")
 
