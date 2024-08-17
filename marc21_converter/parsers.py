@@ -3,7 +3,7 @@ import json
 from marc21_converter.fields import get_control_fields, get_medium_type, get_full_title, get_data_field, get_publication_date, get_contributors, get_identifiers, get_keywords
 from marc21_converter.cleaners import clean_record
 from marc21_converter._constants import DATA_MAPPING
-import re
+from marc21_converter.utils import normalize_unicode
 
 
 def parse_marc21_xml(xml_string):
@@ -13,8 +13,9 @@ def parse_marc21_xml(xml_string):
     for record in root.findall(".//marc:record", namespace):
         processed_record = process_record(record, namespace)
         cleaned_record = clean_record(processed_record, DATA_MAPPING)
-        records.append(cleaned_record)
-    return json.dumps(records, indent=2)
+        normalized_record = normalize_unicode(cleaned_record)
+        records.append(normalized_record)
+    return json.dumps(records, indent=2, ensure_ascii=False)
 
 
 def process_record(record, namespace):
