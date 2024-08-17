@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 import json
 from marc21_converter.utils import get_control_fields, get_medium_type, get_full_title, get_data_field
+import xmlschema
 
 
 mapping = {
@@ -14,8 +15,13 @@ mapping = {
     }
 }
 
+class XMLValidationError(Exception):
+    pass
 
-def parse_marc21_xml(xml_string):
+
+def parse_marc21_xml(xml_string, xsd_path):
+    validate_xml(xml_string, xsd_path)
+
     root = ET.fromstring(xml_string)
     namespace = {"marc": "http://www.loc.gov/MARC21/slim"}
     records = []
@@ -24,6 +30,7 @@ def parse_marc21_xml(xml_string):
         cleaned_record = clean_record(processed_record, mapping)
         records.append(cleaned_record)
     return json.dumps(records, indent=2)
+
 
 def process_record(record, namespace):
     controlfields = get_control_fields(record, namespace)
@@ -48,3 +55,10 @@ def clean_record(processed_record, mappings):
         else:
             cleaned_record[key] = value
     return cleaned_record
+
+
+def validate_xml(xml_string, xsd_path):
+    schema = xmlschema.XMLSchema(xsd_path)
+    if not schema.is_valid(xml_string):
+        raise XMLValidationError("XML validation against the schema failed.")
+
