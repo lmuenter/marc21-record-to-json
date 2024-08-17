@@ -12,8 +12,6 @@ def main():
     parser.add_argument("-o", "--output", required=True, help="Path to output file (json format)")
 
     args = parser.parse_args()
-
-    xsd_path = os.path.join(os.path.dirname(__file__), "marc21_converter", "schemas", "MARC21slim.xsd")
     
     # try parsing
     try:
@@ -27,7 +25,7 @@ def main():
 
     # try processing
     try:
-        parsed_data = parse_marc21_xml(xml_string, xsd_path)
+        parsed_data = parse_marc21_xml(xml_string)
     except XMLValidationError as e:
         print(f"Error: XML validation failed. Details: {e}")
         return
