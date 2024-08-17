@@ -48,4 +48,27 @@ def get_publication_date(record, namespace):
     return parsed_data
 
 def get_contributors(record, namespace):
-    return None
+    authors = get_authors(record, namespace, "100", "a", "4")
+    further_authors = get_authors(record, namespace, "700", "a", "4")
+    return authors + further_authors
+
+def get_authors(record, namespace, tag, subfield_code, role_code):
+    name_records = record.findall(f".//marc:datafield[@tag='{tag}']", namespace)
+
+    authors = []
+    
+    for name_record in name_records:
+        if name_record is not None:
+            full_name = name_record.find(f"marc:subfield[@code='{subfield_code}']", namespace)
+            role_name = name_record.find(f"marc:subfield[@code='{role_code}']", namespace)
+
+            full_name_text = full_name.text
+            name_parts_cleaned = [x.strip() for x in full_name_text.split(',')]
+
+            authors.append({
+                "given_name": name_parts_cleaned[1],
+                "family_name": name_parts_cleaned[0],
+                "role": role_name.text,
+            })
+
+    return authors

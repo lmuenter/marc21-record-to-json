@@ -6,6 +6,10 @@ DATA_MAPPING = {
     "type": {
         "cam": "book",
         "caa": "article",
+    },
+    "role": {
+        "aut": "author",
+        "edt": "editor"
     }
 }
 

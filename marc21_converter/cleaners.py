@@ -28,14 +28,24 @@ def clean_record(processed_record, mappings):
 
 
 def apply_data_mapping(processed_record, mappings):
-    cleaned_record = {}
-    for key, value in processed_record.items():
-        if key in mappings:
-            cleaned_value = mappings[key].get(value, value)
-            cleaned_record[key] = cleaned_value
+    def clean_value(key, value, mappings):
+        if isinstance(value, dict):
+            return {k: clean_value(k, v, mappings) for k, v in value.items()}
+        elif isinstance(value, list):
+            return [clean_value(key, v, mappings) for v in value]
         else:
-            cleaned_record[key] = value
-    return cleaned_record
+            return mappings.get(key, {}).get(value, value)
+
+    def recursive_clean(data, mappings):
+        if isinstance(data, dict):
+            return {k: recursive_clean(clean_value(k, v, mappings), mappings) for k, v in data.items()}
+        elif isinstance(data, list):
+            return [recursive_clean(item, mappings) for item in data]
+        else:
+            return data
+
+    return recursive_clean(processed_record, mappings)
+
 
 
 def clean_dates(data):
