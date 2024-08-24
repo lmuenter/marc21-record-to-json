@@ -25,7 +25,7 @@ function main() {
 
 function are_requirements_satisfied() {
     while read requirement; do
-        if ! pip show $requirement > /dev/null 2>&1; then
+        if pip show $requirement > /dev/null 2>&1; then
             return 1
         fi
     done < requirements.txt
